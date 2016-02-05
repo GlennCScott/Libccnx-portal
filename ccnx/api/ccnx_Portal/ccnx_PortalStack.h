@@ -36,8 +36,7 @@
 
 struct CCNxPortalStack;
 /**
- * @typedef CCNxPortalStack
- * @brief A set of functions and state for the Portal instance.
+ * A set of functions and state for the Portal instance.
  */
 typedef struct CCNxPortalStack CCNxPortalStack;
 

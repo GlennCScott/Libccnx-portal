@@ -187,7 +187,7 @@ SHORT_NAMES            = NO
 # description.)
 # The default value is: NO.
 
-JAVADOC_AUTOBRIEF      = NO
+JAVADOC_AUTOBRIEF      = YES
 
 # If the QT_AUTOBRIEF tag is set to YES then doxygen will interpret the first
 # line (until the first dot) of a Qt-style comment as the brief description. If
@@ -768,7 +768,19 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ../ccnx/api/ccnx_Portal
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/../ccnx/api/ccnx_Portal
+
+# If the value of the INPUT tag contains directories, you can use the
+# excluded from the INPUT source files. This way you can easily exclude a
+# subdirectory from a directory tree whose root is specified with the INPUT tag.
+# If the value of the INPUT tag contains directories, you can use the
+# The INPUT_FILTER tag can be used to specify a program that doxygen should
+# where <filter> is the value of the INPUT_FILTER tag, and <input-file> is the
+INPUT_FILTER           =
+# (like *.cpp=my_cpp_filter). See INPUT_FILTER for further information on how
+# patterns match the file name, INPUT_FILTER is applied.
+# INPUT_FILTER) will also be used to filter the input files that are used for
+# - Make sure the INPUT points to the root of the source tree
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -877,7 +889,7 @@ EXCLUDE_SYMBOLS        =
 # that contain example code fragments that are included (see the \include
 # command).
 
-EXAMPLE_PATH           =
+EXAMPLE_PATH           = examples
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp and
@@ -1140,7 +1152,7 @@ HTML_STYLESHEET        =
 # list). For an example see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  =
+HTML_EXTRA_STYLESHEET  = @CMAKE_CURRENT_SOURCE_DIR@/doxygen-extras/customdoxygen.css @CMAKE_CURRENT_SOURCE_DIR@/doxygen-extras/masthead.css
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note

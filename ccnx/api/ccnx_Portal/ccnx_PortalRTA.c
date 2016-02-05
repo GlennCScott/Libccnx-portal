@@ -315,7 +315,7 @@ _ccnxPortalRTA_Listen(void *privateData, const CCNxName *name, const CCNxStackTi
     // This simply absorbs messages until the receipt of the acknowledgement of this listen.
     // Perhaps what should happen is not read any messages and let the client sort it out in its read loop.
     if (result == true) {
-        CCNxMetaMessage *response = _ccnxPortalRTA_Receive(privateData, microSeconds);
+        CCNxMetaMessage *response = _ccnxPortalRTA_Receive(privateData, CCNxStackTimeout_Never);
 
         if (ccnxMetaMessage_IsControl(response)) {
             // TODO: Check that the response was success.
@@ -344,7 +344,7 @@ _ccnxPortalRTA_Ignore(void *privateData, const CCNxName *name, const CCNxStackTi
     // This simply absorbs messages until the receipt of the acknowledgement of this listen.
     // Perhaps what should happen is not read any messages and let the client sort it out in its read loop.
     if (result == true) {
-        CCNxMetaMessage *response = _ccnxPortalRTA_Receive(privateData, microSeconds);
+        CCNxMetaMessage *response = _ccnxPortalRTA_Receive(privateData, CCNxStackTimeout_Never);
 
         if (ccnxMetaMessage_IsControl(response)) {
             // TODO: Check that the response was success.

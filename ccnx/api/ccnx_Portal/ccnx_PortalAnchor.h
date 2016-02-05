@@ -68,6 +68,22 @@ typedef struct CCNxPortalAnchor CCNxPortalAnchor;
  */
 CCNxPortalAnchor *ccnxPortalAnchor_Acquire(const CCNxPortalAnchor *instance);
 
+/**
+ * Optionally assert that the given `CCNxPortalAnchor` instance is valid.
+ *
+ * @param [in] instance A pointer to a valid `CCNxPortalAnchor` instance.
+ *
+ * Example:
+ * @code
+ * {
+ *     CCNxPortalAnchor *a = ccnxPortalAnchor_Create(name, expireTime);
+ *
+ *     ccnxPortalAnchor_OptionalAssertValid(a);
+ *
+ *     ccnxPortalAnchor_Release(&a);
+ * }
+ * @endcode
+ */
 #ifdef CCNxPortal_DISABLE_VALIDATION
 #  define ccnxPortalAnchor_OptionalAssertValid(_instance_)
 #else
@@ -77,7 +93,7 @@ CCNxPortalAnchor *ccnxPortalAnchor_Acquire(const CCNxPortalAnchor *instance);
 /**
  * Assert that the given `CCNxPortalAnchor` instance is valid.
  *
- * @param [in] instance A pointer to a valid CCNxPortalAnchor instance.
+ * @param [in] instance A pointer to a valid `CCNxPortalAnchor` instance.
  *
  * Example:
  * @code
@@ -88,7 +104,7 @@ CCNxPortalAnchor *ccnxPortalAnchor_Acquire(const CCNxPortalAnchor *instance);
  *
  *     printf("Instance is valid.\n");
  *
- *     ccnxPortalAnchor_Release(&b);
+ *     ccnxPortalAnchor_Release(&a);
  * }
  * @endcode
  */
@@ -97,7 +113,7 @@ void ccnxPortalAnchor_AssertValid(const CCNxPortalAnchor *instance);
 /**
  * Create an instance of CCNxPortalAnchor
  *
- * @return non-NULL A pointer to a valid CCNxPortalAnchor instance.
+ * @return non-NULL A pointer to a valid `CCNxPortalAnchor` instance.
  * @return NULL An error occurred.
  *
  * Example:

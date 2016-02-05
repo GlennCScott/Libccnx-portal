@@ -51,16 +51,15 @@
 #include <parc/algol/parc_OutputStream.h>
 
 int
-ccnGet(PARCIdentity *identity, CCNxName *name)
+ccnGet(const PARCIdentity *identity, const CCNxName *name)
 {
     CCNxPortalFactory *factory = ccnxPortalFactory_Create(identity);
 
     CCNxPortal *portal = ccnxPortalFactory_CreatePortal(factory, ccnxPortalRTA_Message);
 
-    assertNotNull(portal, "Expected a non-null CCNxPortal pointer.");
+    assertNotNull(portal, "ccnxPortalFactory_CreatePortal failed to return a valid CCNxPortal.");
 
     CCNxInterest *interest = ccnxInterest_CreateSimple(name);
-    ccnxName_Release(&name);
 
     CCNxMetaMessage *message = ccnxMetaMessage_CreateFromInterest(interest);
 

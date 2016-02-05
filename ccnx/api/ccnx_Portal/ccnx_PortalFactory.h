@@ -36,8 +36,7 @@
 
 struct CCNxPortalFactory;
 /**
- * @typedef CCNxPortalFactory
- * @brief A Portal factory.
+ * A Portal factory.
  */
 typedef struct CCNxPortalFactory CCNxPortalFactory;
 
@@ -49,9 +48,23 @@ typedef struct CCNxPortalFactory CCNxPortalFactory;
 #include <ccnx/transport/common/transport_MetaMessage.h>
 #include <ccnx/api/ccnx_Portal/ccnx_Portal.h>
 
+/**
+ * The attribute name of the attribute value that LCI name of the local CCN router instance.
+ */
 extern const char *CCNxPortalFactory_LocalRouterName;
-extern const char *CCNxPortalFactory_LocalForwarder;
+
+/**
+ * The attribute name of the attribute value that contains the decimal
+ * representation of the number of seconds to wait for a response from
+ * the local router instance when transmitting configuration messages.
+ */
 extern const char *CCNxPortalFactory_LocalRouterTimeout;
+
+/**
+ * The attribute name of the attribute value that contains the full URI
+ * specification of the connection between the protocol stack and the local forwarder.
+ */
+extern const char *CCNxPortalFactory_LocalForwarder;
 
 /**
  * Create a `CCNxPortalFactory` with the given {@link PARCIdentity}.

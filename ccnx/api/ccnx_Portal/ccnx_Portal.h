@@ -38,8 +38,8 @@
  * This permits a factory to be setup to provide common attributes and configuration parameters shared by multiple `CCNxPortal`
  * instances.
  *
- * The input/output functions, whether direct like `ccnxPortal_Send` and `ccnxPortal_Receive`,
- * in indirect (such as `ccnxPortal_Listen`), take a parameter that specifiess a timeout behaviour for the function.
+ * The input/output functions, like `ccnxPortal_Send` and `ccnxPortal_Receive`,
+ * take a parameter that specifies a timeout behaviour for the function.
  * As a result, an application may use the functions as blocking or non-blocking I/O as needed without having to use
  * multiple `CCNxPortal` instances with different blocking or non-blocking behaviour.
  *
@@ -69,13 +69,13 @@
 
 struct ccnx_portal_status;
 /**
- * @brief The status of the CCNx Portal
+ * The status of the CCNx Portal
  */
 typedef struct ccnx_portal_status CCNxPortalStatus;
 
 struct ccnx_portal;
 /**
- * @brief The CCNx Portal
+ * The CCNx Portal instance
  */
 typedef struct ccnx_portal CCNxPortal;
 
@@ -223,8 +223,6 @@ int ccnxPortal_GetFileId(const CCNxPortal *portal);
  * {
  * }
  * @endcode
- *
- * @see {@link ccnxPortal_GetAttributes}
  */
 bool ccnxPortal_SetAttributes(CCNxPortal *portal, const CCNxPortalAttributes *attributes);
 
@@ -232,14 +230,14 @@ bool ccnxPortal_SetAttributes(CCNxPortal *portal, const CCNxPortalAttributes *at
  * Listen for CCN Interests in the given {@link CCNxName}, i.e., with the given name prefix.
  *
  * If the local CCN router is available, this induces a route update for the given name.
- * Messaging with the local CCN router are governed by the `CCNxPortalFactory` properties named by `CCNxPortalFactory_LocalRouterTimeout`
+ * The local CCN router should continue to advertise the name for the amount of time specified by @p advertiseForSeconds.
  *
- * An invocation of the function will return after the time specified by the `CCNxStackTimeout` value,
- * or the function will potentially wait forever if the value is `CCNxStackTimeout_Never`
+ * Messaging with the local CCN router are governed by the `CCNxPortalFactory` properties named by
+ * `CCNxPortalFactory_LocalRouterTimeout`
  *
  * @param [in] portal A pointer to a `CCNxPortal` instance.
  * @param [in] name A `CCNxName` prefix used to filter and accept Interests.
- * @param [in] secondsToLive The number of seconds for this Listen to remain active.
+ * @param [in] advertiseForSeconds The number of seconds that this Listen should be advertised by the routing system.
  * @param [in] timeout A pointer to a `CCNxStackTimeout` value, or `CCNxStackTimeout_Never`.
  *
  * @return `true` The operation succeeded.
@@ -252,6 +250,8 @@ bool ccnxPortal_SetAttributes(CCNxPortal *portal, const CCNxPortalAttributes *at
  *     const char *uri = "lci:/PARC";
  *     CCNxName *name = ccnxName_CreateFromURI(reguri);
  *
+ *     time_t listenForever = -1;
+ *
  *     if (ccnxPortal_Listen(portal, name, 600, CCNxStackTimeout_MicroSeconds(5000))) {
  *         ...
  *     }
@@ -261,7 +261,7 @@ bool ccnxPortal_SetAttributes(CCNxPortal *portal, const CCNxPortalAttributes *at
  * @see {@link ccnxPortal_Ignore}
  * @see {@link ccnxPortalFactory_CreatePortal}
  */
-bool ccnxPortal_Listen(CCNxPortal *restrict portal, const CCNxName *restrict name, const time_t secondsToLive, const CCNxStackTimeout *timeout);
+bool ccnxPortal_Listen(CCNxPortal *restrict portal, const CCNxName *restrict name, const time_t advertiseForSeconds, const CCNxStackTimeout *timeout);
 
 /**
  * Stop listening for Interests with the given {@link CCNxName}.
