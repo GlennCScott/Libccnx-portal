@@ -252,10 +252,36 @@ typedef CCNxPortal *(CCNxStackImpl)(const CCNxPortalFactory *factory, const CCNx
  */
 CCNxPortal *ccnxPortalFactory_CreatePortal(const CCNxPortalFactory *factory, CCNxStackImpl *stackImplementation);
 
+/**
+ * Get the `PARCProperties` instance from the given `CCNxPortalFactory`.
+ *
+ * @param [in] factory A pointer to a valid CCNxPortalFactory instance.
+ *
+ * @return A pointer to a valid `PARCProperties` instance.
+ */
 PARCProperties *ccnxPortalFactory_GetProperties(const CCNxPortalFactory *factory);
 
+/**
+ * Get the value of the named property.
+ *
+ * If the named property is not in the `PARCProperties` associated with the given `CCNxPortalFactory` instance,
+ * the supplied default value is returned.
+ *
+ * @param [in] factory A pointer to a valid `CCNxPortalFactory` instance.
+ * @param [in] name A pointer to a nul-terminated C string representing the name of the property to get.
+ * @param [in] defaultValue A pointer to a nul-terminated C string or NULL.
+ *
+ * @return A pointer to a a nul-terminated C string or NULL
+ */
 const char *ccnxPortalFactory_GetProperty(const CCNxPortalFactory *factory, const char *restrict name, const char *restrict defaultValue);
 
+/**
+ * Set the value of the named property.
+ *
+ * @param [in] factory A pointer to a valid `CCNxPortalFactory` instance.
+ * @param [in] name A pointer to a nul-terminated C string representing the name of the property to get.
+ * @param [in] value A pointer to a nul-terminated C string.
+ */
 void ccnxPortalFactory_SetProperty(const CCNxPortalFactory *factory, const char *restrict name, const char *restrict value);
 
 #endif  // CCNx_Portal_API_ccnx_Portal_h

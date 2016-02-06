@@ -28,8 +28,12 @@
  * @file ccnx_PortalAnchor.h
  * @brief CCN Routing control for CCNxPortal
  *
+ * The CCNx Portal API can interact with a routing service by informing the routing
+ * service of the names that a particular Portal instance is listening for.
+ * This consists of creating an "Anchor" message and transmitting it to the local routing service.
+ *
  * @author Glenn Scott, Palo Alto Research Center (Xerox PARC)
- * @copyright 2015, Xerox Corporation (Xerox)and Palo Alto Research Center (PARC).  All rights reserved.
+ * @copyright 2015-2016, Xerox Corporation (Xerox)and Palo Alto Research Center (PARC).  All rights reserved.
  */
 #ifndef CCNxPortal_ccnx_PortalAnchor
 #define CCNxPortal_ccnx_PortalAnchor
@@ -40,6 +44,9 @@
 
 #include <ccnx/common/ccnx_Name.h>
 
+/**
+ * A CCNx Portal Anchor instance.
+ */
 struct CCNxPortalAnchor;
 typedef struct CCNxPortalAnchor CCNxPortalAnchor;
 
@@ -50,7 +57,7 @@ typedef struct CCNxPortalAnchor CCNxPortalAnchor;
  * only that the given `CCNxPortalAnchor` reference count is incremented.
  * Discard the reference by invoking `ccnxPortalAnchor_Release`.
  *
- * @param [in] instance A pointer to a valid CCNxPortalAnchor instance.
+ * @param [in] instance A pointer to a valid `CCNxPortalAnchor `instance.
  *
  * @return The same value as @p instance.
  *
@@ -71,7 +78,7 @@ CCNxPortalAnchor *ccnxPortalAnchor_Acquire(const CCNxPortalAnchor *instance);
 /**
  * Optionally assert that the given `CCNxPortalAnchor` instance is valid.
  *
- * @param [in] instance A pointer to a valid `CCNxPortalAnchor` instance.
+ * @param [in] _instance_ A pointer to a valid `CCNxPortalAnchor` instance.
  *
  * Example:
  * @code
@@ -113,6 +120,9 @@ void ccnxPortalAnchor_AssertValid(const CCNxPortalAnchor *instance);
 /**
  * Create an instance of CCNxPortalAnchor
  *
+ * @param [in] name A pointer to a valid CCNxName instance that this anchor will represent.
+ * @param [in] expireTime The time at which this anchor will no longer be valid.
+ 
  * @return non-NULL A pointer to a valid `CCNxPortalAnchor` instance.
  * @return NULL An error occurred.
  *
@@ -390,7 +400,7 @@ char *ccnxPortalAnchor_ToString(const CCNxPortalAnchor *instance);
 /**
  * Append a representation of the specified `CCNxPortalAnchor` instance to the given `PARCBufferComposer`.
  *
- * @param [in] name A pointer to a `CCNxPortalAnchor` instance whose representation should be appended to the @p composer.
+ * @param [in] anchor A pointer to a `CCNxPortalAnchor` instance whose representation should be appended to the @p composer.
  * @param [in,out] composer A pointer to a `PARCBufferComposer` instance to be modified.
  *
  * @return NULL Cannot allocate memory.
@@ -413,13 +423,81 @@ char *ccnxPortalAnchor_ToString(const CCNxPortalAnchor *instance);
  */
 PARCBufferComposer *ccnxPortalAnchor_BuildString(const CCNxPortalAnchor *anchor, PARCBufferComposer *composer);
 
+/**
+ * Decode a serialized form an instance such that may be reconstituted via a `ccnxPortalAnchor_Deserialize` function.
+ *
+ * The supplied `PARCBuffer` contains the encoded data starting at its current position.
+ * Because the buffer may contain other data, the `ccnxPortalAnchor_Serialize` function must provide internal
+ * metadata for the deserialization function such that
+ * it must not rely on reaching the buffer's limit as the indicator to stop deserializing.
+ *
+ * Future implementations of this function may take a `PARCInputStream` rather than a `PARCBufferComposer`.
+ *
+ * @param [in] buffer a pointer to a valid instance of `PARCBuffer`
+ *
+ * @return The value of @p composer.
+ *
+ * Example:
+ * @code
+ * {
+ *     PARCBuffer *buffer = ...;
+ *
+ *     CCNxPortalAnchor *a = ccnxPortalAnchor_Deserialize(buffer);
+ *
+ *     ccnxPortalAnchor_Release(&a);
+ * }
+ * @endcode
+ */
 CCNxPortalAnchor *ccnxPortalAnchor_Deserialize(PARCBuffer *buffer);
 
+/**
+ * Encode a serialized form an instance such that may be reconstituted via a `ccnxPortalAnchor_Deserialize` function.
+ *
+ * The supplied `PARCBufferComposer` is updated with the encoded data.
+ * A single `PARCBufferComposer` can be used to encode instances of unrelated types
+ * provided they are deserialized in the same order.
+ *
+ * Future implementations of this function may take a `PARCOutputStream` rather than a `PARCBufferComposer`.
+ *
+ * @param [in] anchor A pointer to a valid `CCNxPortalAnchor` instance.
+ * @param [in] composer a pointer to a valid `PARCBufferComposer instance.
+ *
+ * @return The value of @p composer.
+ *
+ * Example:
+ * @code
+ * {
+ *     <#example#>
+ * }
+ * @endcode
+ */
 PARCBufferComposer *ccnxPortalAnchor_Serialize(const CCNxPortalAnchor *anchor, PARCBufferComposer *composer);
 
+/**
+ * Get the CCNxName that this anchor is representing.
+ *
+ * @param [in] anchor A pointer to a valid CCNxPortalAnchor instance.
+ *
+ * @return non-NULL A pointer to a valid CCNxName instance.
+ */
 CCNxName *ccnxPortalAnchor_GetNamePrefix(const CCNxPortalAnchor *anchor);
 
+/**
+ * Get the time at which this anchor will no longer be considered valid.
+ *
+ * @param [in] anchor A pointer to a valid CCNxPortalAnchor instance.
+ *
+ * @return The time at which this anchor will no longer be considered valid.
+ */
 time_t ccnxPortalAnchor_GetExpireTime(const CCNxPortalAnchor *anchor);
 
+/**
+ * Set the time at which this anchor will no longer be considered valid.
+ *
+ * @param [in] anchor A pointer to a valid CCNxPortalAnchor instance.
+ * @param [in] expireTime The time at which this anchor will no longer be valid.
+ *
+ * @return The previous value of the expire time.
+ */
 time_t ccnxPortalAnchor_SetExpireTime(CCNxPortalAnchor *anchor, const time_t expireTime);
 #endif
